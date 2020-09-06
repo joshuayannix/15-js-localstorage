@@ -23,12 +23,16 @@
       <input type="text" name="item" placeholder="Item Name" required>
       <input type="submit" value="+ Add Item">
     </form>
+    <form class='clear-items'>
+      <input type="submit" value="Clear Items">
+    </form>
   </div>
 
 <script>
   const addItems = document.querySelector('.add-items');
   const itemsList = document.querySelector('.plates');
   const items = JSON.parse(localStorage.getItem('items')) || [];
+  const clearItems = document.querySelector('.clear-items');
 
   function addItem(e) {
     e.preventDefault();
@@ -48,7 +52,7 @@
   function populateList(plates = [], platesList) {
     platesList.innerHTML = plates.map((plate, i) => {
       return `
-        <li>
+        <li class='plate'>
           <input type="checkbox" data-index=${i} id="item${i}" ${plate.done ? 'checked' : ''} />
           <label for="item${i}">${plate.text}</label>
         </li>
@@ -65,11 +69,25 @@
     populateList(items, itemsList);
   };
 
+  function clearAll(e){
+    e.preventDefault();
+    const plates = document.querySelectorAll('.plate')
+    if(plates.length > 0){
+      plates.forEach(item => {
+        itemsList.removeChild(item)
+      })
+    }
+    localStorage.removeItem('items')
+  }
+
   addItems.addEventListener('submit', addItem);
   itemsList.addEventListener('click', toggleDone);
-
+  clearItems.addEventListener('click', clearAll);
 
   populateList(items, itemsList);
+
+  // add check all button
+  // add clear all button
 </script>
 
 
